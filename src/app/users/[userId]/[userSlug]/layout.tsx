@@ -4,7 +4,7 @@ import { UserPrefs } from "@/store/auth";
 import convertDateToRelativeTime from "@/utils/relativeTime";
 import React from "react";
 import EditButton from "./EditButton";
-import Navbar from "./NavBar";
+import Navbar from "./Navbar";
 import { IconClockFilled, IconUserFilled } from "@tabler/icons-react";
 
 const Layout = async ({
