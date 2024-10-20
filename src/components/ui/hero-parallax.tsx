@@ -11,8 +11,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const HeroParallax = ({
+  header,
   products,
 }: {
+  header: React.ReactNode;
   products: {
     title: string;
     link: string;
@@ -22,6 +24,7 @@ export const HeroParallax = ({
   const firstRow = products.slice(0, 5);
   const secondRow = products.slice(5, 10);
   const thirdRow = products.slice(10, 15);
+
   const ref = React.useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -59,7 +62,7 @@ export const HeroParallax = ({
       ref={ref}
       className="h-[300vh] py-40 overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
     >
-      <Header />
+      {header && <div>{header}</div>}
       <motion.div
         style={{
           rotateX,
