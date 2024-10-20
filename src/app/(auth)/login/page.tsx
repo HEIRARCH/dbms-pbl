@@ -58,7 +58,6 @@ export default function Login() {
    if (loginResponse.error) {
     setError(() => loginResponse.error!.message)
    }
-   
    setIsLoading(() => false)
   };
 
