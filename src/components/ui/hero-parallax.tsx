@@ -14,7 +14,7 @@ export const HeroParallax = ({
   header,
   products,
 }: {
-  header: React.ReactNode;
+  header?: React.ReactNode;
   products: {
     title: string;
     link: string;
