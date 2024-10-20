@@ -54,7 +54,7 @@ const Page = async ({
                     </div>
                 ))}
             </div>
-            <Pagination total={answers.total} limit={25} />
+            <Pagination total={answers.total} limit={25} comments= {answers} />
         </div>
     );
 };
