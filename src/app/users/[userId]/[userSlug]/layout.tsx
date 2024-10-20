@@ -3,8 +3,8 @@ import { users } from "@/models/server/config";
 import { UserPrefs } from "@/store/auth";
 import convertDateToRelativeTime from "@/utils/relativeTime";
 import React from "react";
-import EditButton from "./users/[userId]/[userSlug]/EditButton";
-import Navbar from "./users/[userId]/[userSlug]/Navbar";
+import EditButton from "./EditButton";
+import Navbar from "./Navbar";
 import { IconClockFilled, IconUserFilled } from "@tabler/icons-react";
 
 const Layout = async ({
