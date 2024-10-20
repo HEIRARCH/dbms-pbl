@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { databases, storage } from "@/models/client/config";
 import { db, questionAttachmentBucket, questionCollection } from "@/models/name";
-import { Confetti } from "@/components/magicui/confetti";
+import confetti from "canvas-confetti";
 
 const LabelInputContainer = ({
     children,
@@ -63,7 +63,7 @@ const QuestionForm = ({ question }: { question?: Models.Document }) => {
         const frame = () => {
             if (Date.now() > end) return;
 
-            Confetti({
+            confetti({
                 particleCount: 2,
                 angle: 60,
                 spread: 55,
@@ -71,7 +71,7 @@ const QuestionForm = ({ question }: { question?: Models.Document }) => {
                 origin: { x: 0, y: 0.5 },
                 colors: colors,
             });
-            Confetti({
+            confetti({
                 particleCount: 2,
                 angle: 120,
                 spread: 55,
