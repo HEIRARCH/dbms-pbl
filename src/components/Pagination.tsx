@@ -12,14 +12,18 @@ import Link from "next/link";
 import React from "react";
 
 const Comments = ({
+    total,
+    limit,
     comments: _comments,
     type,
     typeId,
     className,
 }: {
+    total: number;
+    limit: number;
     comments: Models.DocumentList<Models.Document>;
-    type: "question" | "answer";
-    typeId: string;
+    type?: "question" | "answer";
+    typeId?: string;
     className?: string;
 }) => {
     const [comments, setComments] = React.useState(_comments);

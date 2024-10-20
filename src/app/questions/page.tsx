@@ -1,3 +1,5 @@
+//there was a pagination here
+
 import { databases, users } from "@/models/server/config";
 import { answerCollection, db, voteCollection, questionCollection } from "@/models/name";
 import { Query } from "node-appwrite";
@@ -6,7 +8,6 @@ import Link from "next/link";
 import ShimmerButton from "@/components/magicui/shimmer-button";
 import QuestionCard from "@/components/QuestionCard";
 import { UserPrefs } from "@/store/auth";
-import Pagination from "@/components/Pagination";
 import Search from "./Search";
 
 const Page = async ({
@@ -85,7 +86,7 @@ const Page = async ({
                     <QuestionCard key={ques.$id} ques={ques} />
                 ))}
             </div>
-            <Pagination total ={questions.total} limit={25} />
+            
         </div>
     );
 };
