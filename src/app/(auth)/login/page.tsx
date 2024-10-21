@@ -99,7 +99,7 @@ export default function Login() {
                 type="submit"
                 disabled={isLoading}
             >
-                {isLoading ? 'Loading...' : 'Log in &rarr;'}
+                {isLoading ? 'Loading...' : 'Log in'}
                 <BottomGradient />
             </button>
 
