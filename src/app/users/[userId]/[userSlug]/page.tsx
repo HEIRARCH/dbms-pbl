@@ -1,5 +1,5 @@
 import { databases, users } from "@/models/server/config";
-import { UserPrefs } from "@/store/auth";
+import { UserPrefs } from "@/store/Auth";
 import React from "react";
 import { MagicCard } from "@/components/magicui/magic-card";
 import NumberTicker from "@/components/magicui/number-ticker";

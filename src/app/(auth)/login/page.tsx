@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthStore } from '@/store/auth';
+import { useAuthStore } from '@/store/Auth';
 import React from 'react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -99,7 +99,7 @@ export default function Login() {
                 type="submit"
                 disabled={isLoading}
             >
-                Log in &rarr;
+                {isLoading ? 'Loading...' : 'Log in &rarr;'}
                 <BottomGradient />
             </button>
 

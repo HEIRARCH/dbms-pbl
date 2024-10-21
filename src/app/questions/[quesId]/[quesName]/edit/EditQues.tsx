@@ -1,7 +1,7 @@
 "use client";
 
 import QuestionForm from "@/components/QuestionForm";
-import { useAuthStore } from "@/store/auth";
+import { useAuthStore } from "@/store/Auth";
 import slugify from "@/utils/slugify";
 import { Models } from "appwrite";
 import { useRouter } from "next/navigation";
@@ -15,9 +15,9 @@ const EditQues = ({ question }: { question: Models.Document }) => {
         if (question.authorId !== user?.$id) {
             router.push(`/questions/${question.$id}/${slugify(question.title)}`);
         }
-    }, []);
+    }, [question, user, router]);
 
-    if (user?.$id !== question.authorId) return null;
+    if (!user || user?.$id !== question.authorId) return null;
 
     return (
         <div className="block pb-20 pt-32">

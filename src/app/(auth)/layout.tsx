@@ -1,19 +1,26 @@
 "use client";
 
 import { BackgroundBeams } from "@/components/ui/background-beams";
-import { useAuthStore } from "@/store/auth";
+import { useAuthStore } from "@/store/Auth";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const Layout = ({children}: {children: React.ReactNode}) => {
   const {session} = useAuthStore();
-  const router = useRouter()
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
    if (session) {
     router.push("/")
+   }else {
+    setLoading(false);
    }
-  }, [session, router])
+  }, [session, router]);
+
+  if (loading) {
+    return <p>Loading...</p>; // Or a spinner component
+  }
 
   if (session) {
     return null

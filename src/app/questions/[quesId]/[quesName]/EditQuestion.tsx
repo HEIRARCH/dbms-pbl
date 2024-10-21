@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthStore } from "@/store/auth";
+import { useAuthStore } from "@/store/Auth";
 import slugify from "@/utils/slugify";
 import { IconEdit } from "@tabler/icons-react";
 import Link from "next/link";
@@ -16,6 +16,13 @@ const EditQuestion = ({
     authorId: string;
 }) => {
     const { user } = useAuthStore();
+
+    // Handle cases where user is not available (optional chaining already does that but you can ensure)
+    if (!user || !user.$id) return null;
+
+    // Ensure slugify works correctly even for empty or problematic titles
+    const slugifiedTitle = slugify(questionTitle) || "untitled";
+
 
     return user?.$id === authorId ? (
         <Link

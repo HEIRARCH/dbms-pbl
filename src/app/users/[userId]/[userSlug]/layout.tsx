@@ -1,6 +1,6 @@
 import { avatars } from "@/models/client/config";
 import { users } from "@/models/server/config";
-import { UserPrefs } from "@/store/auth";
+import { UserPrefs } from "@/store/Auth";
 import convertDateToRelativeTime from "@/utils/relativeTime";
 import React from "react";
 import EditButton from "./EditButton";

@@ -15,7 +15,7 @@ import {
 } from "@/models/name";
 import { databases, users } from "@/models/server/config";
 import { storage } from "@/models/client/config";
-import { UserPrefs } from "@/store/auth";
+import { UserPrefs } from "@/store/Auth";
 import convertDateToRelativeTime from "@/utils/relativeTime";
 import slugify from "@/utils/slugify";
 import { IconEdit } from "@tabler/icons-react";

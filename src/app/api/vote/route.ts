@@ -1,16 +1,23 @@
 import { answerCollection, db, questionCollection, voteCollection } from "@/models/name";
 import { databases, users } from "@/models/server/config";
-import { UserPrefs } from "@/store/auth";
+import { UserPrefs } from "@/store/Auth";
 import { NextRequest, NextResponse } from "next/server";
 import { ID, Query } from "node-appwrite";
+
+type VoteBody = {
+  votedById: string;
+  voteStatus: "upvoted" | "downvoted";
+  type: "question" | "answer";
+  typeId: string;
+};
 
 export async function POST(request: NextRequest) {
   try {
     //grab the data
-    const { votedById, voteStatus, type, typeId } = await request.json()
+    const { votedById, voteStatus, type, typeId }: VoteBody = await request.json();
 
-    //list-document
-    const response = await databases.listDocuments(
+    //check if vote already exists
+    const existingVote = await databases.listDocuments(
       db, voteCollection, [
       Query.equal("type", type),
       Query.equal("typeId", typeId),
@@ -18,92 +25,46 @@ export async function POST(request: NextRequest) {
     ]
     );
 
-    //means that vote exists
-    if (response.documents.length > 0) {
-      await databases.deleteDocument(db, voteCollection, response.documents[0].$id)
+    const voteExists = existingVote.documents.length > 0;
 
-      // decrease the reputation of question/answer author
-      const questionOrAnswer = await databases.getDocument(
-        db,
-        type === "question" ? questionCollection : answerCollection,
-        typeId
-      );
 
-      const authorPrefs = await users.getPrefs<UserPrefs>(questionOrAnswer.authorId)
+    // decrease the reputation of question/answer author
+    const questionOrAnswer = await databases.getDocument(
+      db,
+      type === "question" ? questionCollection : answerCollection,
+      typeId
+    );
 
-      await users.updatePrefs<UserPrefs>(questionOrAnswer.authorId, {
-        reputation: response.documents[0].voteStatus === "upvoted" ? Number(authorPrefs.reputation) - 1 : Number(authorPrefs.reputation) + 1
-      });
-    }
+    const authorPrefs = await users.getPrefs<UserPrefs>(questionOrAnswer.authorId);
+    let reputation = Number(authorPrefs.reputation) || 0;
 
-    // means that previous vote does not exist or vote status changes
-    if (response.documents[0]?.voteStatus !== voteStatus) {
-      const doc = await databases.createDocument(db, voteCollection, ID.unique(), {
+    // If the vote exists, handle the vote withdrawal or status change
+    if (voteExists) {
+      const currentVote = existingVote.documents[0];
+
+      if (currentVote.voteStatus === voteStatus) {
+        // Vote is being withdrawn
+        await databases.deleteDocument(db, voteCollection, currentVote.$id);
+        reputation += voteStatus === "upvoted" ? -1 : 1; // Adjust reputation accordingly
+      } else {
+        // Vote status is changing (upvote to downvote or vice versa)
+        await databases.updateDocument(db, voteCollection, currentVote.$id, { voteStatus });
+        reputation += voteStatus === "upvoted" ? 2 : -2; // Adjust reputation for change in vote status
+      }
+    } else {
+      // Create a new vote
+      await databases.createDocument(db, voteCollection, ID.unique(), {
         type,
         typeId,
         voteStatus,
         votedById,
       });
 
-      //Increase/decrease the reputation of the question/answer author accordingly
-      const questionOrAnswer = await databases.getDocument(
-        db,
-        type === "question" ? questionCollection : answerCollection,
-        typeId
-      );
-
-      const authorPrefs = await users.getPrefs<UserPrefs>(questionOrAnswer.authorId)
-
-      //if vote was present
-      if (response.documents[0]) {
-        await users.updatePrefs<UserPrefs>(
-          questionOrAnswer.authorId, {
-          reputation:
-            //that means prev vote was "upvoted" and new value is "downvoted" so we have to decrease the reputation
-            response.documents[0].votestatus === "upvoted"
-              ? Number(authorPrefs.reputation) - 1 : Number(authorPrefs.reputation) + 1,
-        }
-        );
-      } else {
-        await users.updatePrefs<UserPrefs>(
-          questionOrAnswer.authorId, {
-          reputation:
-            // that means prev vote was "upvoted" and new value is "downvoted" sp we have to increase the reputation
-            voteStatus === "upvoted"
-              ? Number(authorPrefs.reputation) + 1 :
-              Number(authorPrefs.reputation) - 1,
-        }
-        );
-      }
-      const [upvotes, downvotes] = await Promise.all([
-        databases.listDocuments(db, voteCollection, [
-          Query.equal("type", type),
-          Query.equal("typeId", typeId),
-          Query.equal("voteStatus", "upvoted"),
-          Query.equal("votedById", votedById),
-          Query.limit(1), //for optimization as we only need total
-        ]),
-        databases.listDocuments(db, voteCollection, [
-          Query.equal("type", type),
-          Query.equal("typeId", typeId),
-          Query.equal("voteStatus", "downvoted"),
-          Query.equal("votedById", votedById),
-          Query.limit(1), //for optimization as we only need total
-        ]),
-      ]);
-
-      return NextResponse.json(
-        {
-          data: {
-            document: doc, voteResult: upvotes.total - downvotes.total
-          },
-          message: response.documents[0] ? "vote Status Updated" : "Voted",
-        },
-        {
-          status: 201,
-        }
-      );
+      // Adjust reputation based on new vote
+      reputation += voteStatus === "upvoted" ? 1 : -1;
     }
+
+    await users.updatePrefs<UserPrefs>(questionOrAnswer.authorId, { reputation });
 
     const [upvotes, downvotes] = await Promise.all([
       databases.listDocuments(db, voteCollection, [
@@ -122,26 +83,23 @@ export async function POST(request: NextRequest) {
       ]),
     ]);
 
+    const voteResult = upvotes.total - downvotes.total;
+
     return NextResponse.json(
       {
-        data: {
-          document: null, voteResult: upvotes.total - downvotes.total
-        },
-        message: "Vote Withdrawn",
+        data: { voteResult },
+        message: voteExists ? "Vote updated" : "Voted successfully",
       },
-      {
-        status: 200,
-      }
+      { status: 201 }
     );
-
   } catch (error: any) {
     return NextResponse.json(
       {
-        message: error?.message || "Error in voting"
+        message: error?.message || "Error in voting",
       },
       {
-        status: error?.status || error?.code || 500
+        status: error?.status || error?.code || 500,
       }
-    )
+    );
   }
 }

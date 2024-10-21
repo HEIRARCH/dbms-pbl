@@ -1,11 +1,11 @@
 import { cn } from "@/lib/utils";
-
 import { AnimatedList } from "@/components/magicui/animated-list";
 import { users } from "@/models/server/config";
 import { Models, Query } from "node-appwrite";
-import { UserPrefs } from "@/store/auth";
+import { UserPrefs } from "@/store/Auth";
 import convertDateToRelativeTime from "@/utils/relativeTime";
 import { avatars } from "@/models/client/config";
+import React from "react"
 
 const Notification = ({ user }: { user: Models.User<UserPrefs> }) => {
     return (
@@ -48,15 +48,24 @@ const Notification = ({ user }: { user: Models.User<UserPrefs> }) => {
 };
 
 export default async function TopContributers() {
-    const topUsers = await users.list<UserPrefs>([Query.limit(10)]);
+    try {
+        const topUsers = await users.list<UserPrefs>([Query.limit(10)]);
 
-    return (
-        <div className="bg-background relative flex max-h-[400px] min-h-[400px] w-full max-w-[32rem] flex-col overflow-hidden rounded-lg bg-white/10 p-6 shadow-lg">
-            <AnimatedList>
-                {topUsers.users.map(user => (
-                    <Notification user={user} key={user.$id} />
-                ))}
-            </AnimatedList>
-        </div>
-    );
+        if (topUsers.users.length === 0) {
+            return <div>No top contributors available.</div>;
+        }
+
+        return (
+            <div className="bg-background relative flex max-h-[400px] min-h-[400px] w-full max-w-[32rem] flex-col overflow-hidden rounded-lg bg-white/10 p-6 shadow-lg">
+                <AnimatedList>
+                    {topUsers.users.map((user) => (
+                        <Notification user={user} key={user.$id} />
+                    ))}
+                </AnimatedList>
+            </div>
+        );
+    } catch (error) {
+        console.error("Error fetching top users:", error);
+        return <div>Error loading top contributors. Please try again later.</div>;
+    }
 }

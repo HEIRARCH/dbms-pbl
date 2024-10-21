@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthStore } from "@/store/auth";
+import { useAuthStore } from "@/store/Auth";
 import React from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -118,7 +118,7 @@ export default function Register() {
                     type="submit"
                     disabled={isLoading}
                 >
-                    Sign up &rarr;
+                    {isLoading ? 'Signing up...' : 'Sign up &rarr;'}
                     <BottomGradient />
                 </button>
 

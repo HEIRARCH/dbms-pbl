@@ -3,7 +3,7 @@
 import { ID, Models } from "appwrite";
 import React from "react";
 import VoteButtons from "./VoteButtons";
-import { useAuthStore } from "@/store/auth";
+import { useAuthStore } from "@/store/Auth";
 import { avatars, databases } from "@/models/client/config";
 import { answerCollection, db } from "@/models/name";
 import RTE, { MarkdownPreview } from "./RTE";
