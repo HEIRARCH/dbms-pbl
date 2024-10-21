@@ -5,25 +5,19 @@ import { db, questionCollection } from "@/models/name";
 import { useAuthStore } from "@/store/Auth";
 import { IconTrash } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import React, { useState }from "react";
+import React from "react";
 
 const DeleteQuestion = ({ questionId, authorId }: { questionId: string; authorId: string }) => {
     const router = useRouter();
     const { user } = useAuthStore();
-    const [isDeleting, setIsDeleting] = useState(false);
 
     const deleteQuestion = async () => {
-        const confirmed = window.confirm("Are you sure you want to delete this question?");
-        if (!confirmed) return;
-
-        setIsDeleting(true);
         try {
             await databases.deleteDocument(db, questionCollection, questionId);
+
             router.push("/questions");
         } catch (error: any) {
             window.alert(error?.message || "Something went wrong");
-        } finally {
-            setIsDeleting(false);
         }
     };
 
@@ -31,13 +25,8 @@ const DeleteQuestion = ({ questionId, authorId }: { questionId: string; authorId
         <button
             className="flex h-10 w-10 items-center justify-center rounded-full border border-red-500 p-1 text-red-500 duration-200 hover:bg-red-500/10"
             onClick={deleteQuestion}
-            disabled={isDeleting}  // Disable button while processing
         >
-            {isDeleting ? (
-                <span className="loader" />  /* Optional loading spinner */
-            ) : (
-                <IconTrash className="h-4 w-4" />
-            )}
+            <IconTrash className="h-4 w-4" />
         </button>
     ) : null;
 };

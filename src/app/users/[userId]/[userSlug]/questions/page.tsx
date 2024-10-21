@@ -62,7 +62,7 @@ const Page = async ({
                     <QuestionCard key={ques.$id} ques={ques} />
                 ))}
             </div>
-            <Pagination total={questions.total} limit={25} comments={questions}/>
+            <Pagination total={questions.total} limit={25} />
         </div>
     );
 };

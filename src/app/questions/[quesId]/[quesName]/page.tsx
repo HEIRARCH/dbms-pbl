@@ -141,7 +141,7 @@ const Page = async ({ params }: { params: { quesId: string; quesName: string } }
                             <span>Votes {upvotes.total + downvotes.total}</span>
                         </div>
                     </div>
-                    <Link href="/questions/[quesId]/[quesName]/edit" className="ml-auto inline-block shrink-0">
+                    <Link href="/questions/ask" className="ml-auto inline-block shrink-0">
                         <ShimmerButton className="shadow-2xl">
                             <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
                                 Ask a question

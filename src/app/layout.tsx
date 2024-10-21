@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 import { cn } from "@/lib/utils";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
+
 
 export const metadata: Metadata = {
   title: "DBMS PBL",
@@ -24,7 +24,6 @@ export default function RootLayout({
         <nav>
           {children}
         </nav>
-        <Footer />
         </body>
     </html>
   );

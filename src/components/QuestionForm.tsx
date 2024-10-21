@@ -195,7 +195,7 @@ const QuestionForm = ({ question }: { question?: Models.Document }) => {
                     </small>
                 </Label>
                 <RTE
-                    value ={formData.content}
+                    value={formData.content}
                     onChange={value => setFormData(prev => ({ ...prev, content: value || "" }))}
                 />
             </LabelInputContainer>

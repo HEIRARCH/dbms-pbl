@@ -109,7 +109,7 @@ const VoteButtons = ({
                 <IconCaretUpFilled />
             </button>
             <span>{voteResult}</span>
-            <button 
+            <button
                 className={cn(
                     "flex h-10 w-10 items-center justify-center rounded-full border p-1 duration-200 hover:bg-white/10",
                     votedDocument && votedDocument.voteStatus === "downvoted"

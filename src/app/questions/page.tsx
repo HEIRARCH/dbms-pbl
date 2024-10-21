@@ -66,7 +66,7 @@ const Page = async ({
         <div className="container mx-auto px-4 pb-20 pt-36">
             <div className="mb-10 flex items-center justify-between">
                 <h1 className="text-3xl font-bold">All Questions</h1>
-                <Link href="/edit">
+                <Link href="/questions/ask">
                     <ShimmerButton className="shadow-2xl">
                         <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
                             Ask a question
@@ -85,7 +85,7 @@ const Page = async ({
                     <QuestionCard key={ques.$id} ques={ques} />
                 ))}
             </div>
-            <Pagination total={questions.total} limit={25} comments={questions} />
+            <Pagination total={questions.total} limit={25} />
         </div>
     );
 };
