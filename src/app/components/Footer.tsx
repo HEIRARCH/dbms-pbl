@@ -3,50 +3,40 @@ import AnimatedGridPattern from "@/components/magicui/animated-grid-pattern";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-type MenuItem = {
-    title: string;
-    href: string;
-};
-
-const items: MenuItem[] = [
-    {
-        title: "Home",
-        href: "/",
-    },
-    {
-        title: "About",
-        href: "/about",
-    },
-    {
-        title: "Privacy Policy",
-        href: "/privacy-policy",
-    },
-    {
-        title: "Terms of Service",
-        href: "/terms-of-service",
-    },
-    {
-        title: "Questions",
-        href: "/questions",
-    },
-];
-
 const Footer = () => {
+    const items = [
+        {
+            title: "Home",
+            href: "/",
+        },
+        {
+            title: "About",
+            href: "/about",
+        },
+        {
+            title: "Privacy Policy",
+            href: "/privacy-policy",
+        },
+        {
+            title: "Terms of Service",
+            href: "/terms-of-service",
+        },
+        {
+            title: "Questions",
+            href: "/questions",
+        },
+    ];
     return (
         <footer className="relative block overflow-hidden border-t border-solid border-white/30 py-20">
             <div className="container mx-auto px-4">
-                <nav>
-                    <ul className="flex flex-wrap items-center justify-center gap-3">
-                        {items.map(item => (
-                            <li key={item.href}>
-                                <Link href={item.href} title={item.title}>{item.title}</Link>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
-                <address className="mt-4 text-center not-italic">
-                    &copy; {new Date().getFullYear()} DBMS
-                </address>
+                <ul className="flex flex-wrap items-center justify-center gap-3">
+                    {items.map(item => (
+                        <li key={item.href}>
+                            <Link href={item.href}>{item.title}</Link>
+                        </li>
+                    ))}
+                </ul>
+                <div className="mt-4 text-center">&copy; {new Date().getFullYear()} Riverpod</div>
             </div>
             <AnimatedGridPattern
                 numSquares={30}

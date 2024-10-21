@@ -1,37 +1,32 @@
 "use client";
 
 import { BackgroundBeams } from "@/components/ui/background-beams";
-import { useAuthStore } from "@/store/Auth";
+import { useAuthStore } from "@/store/Auth"
 import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React from "react";
+
 
 const Layout = ({children}: {children: React.ReactNode}) => {
   const {session} = useAuthStore();
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const router = useRouter()
 
-  useEffect(() => {
-   if (session) {
-    router.push("/")
-   }else {
-    setLoading(false);
-   }
-  }, [session, router]);
-
-  if (loading) {
-    return <p>Loading...</p>; // Or a spinner component
-  }
+  React.useEffect(() => {
+    if (session) {
+      router.push("/")
+    }
+  }, [session, router])
 
   if (session) {
     return null
   }
-  
+
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center py-12">
-      <BackgroundBeams/>
+      <BackgroundBeams />
       <div className="relative">{children}</div>
     </div>
   )
 }
+
 
 export default Layout
