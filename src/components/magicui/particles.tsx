@@ -259,15 +259,15 @@ const Particles: React.FC<ParticlesProps> = ({
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [color]); // Dependencies: color
+  }, [color, animate, initCanvas]); // Dependencies: color
 
   useEffect(() => {
     onMouseMove();
-  }, [mousePosition.x, mousePosition.y]);
+  }, [mousePosition.x, mousePosition.y, onMouseMove]);
 
   useEffect(() => {
     initCanvas();
-  }, [refresh]);
+  }, [refresh, initCanvas]);
 
   return (
     <div
